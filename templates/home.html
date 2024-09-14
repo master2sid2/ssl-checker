@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/home.style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="/static/media/favicon.ico" type="image/x-icon">
+    <script src="/static/js/home.script.js"></script>
+    <title>Home Page</title>
+    <style>
+        .status-ok { background-color: #d4edda; }
+        .status-warning { background-color: #fff3cd; }
+        .status-error { background-color: #f8d7da; }
+        .error-message {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    {{template "navbar.html" .}}
+    <h1>Home Page</h1>
+
+    {{if .isAdmin}}
+    <div class="add-domain-btn">
+        <h2>Add New Domain</h2>
+        <form action="/home/add-domain" method="post">
+            <label for="domain-name">Domain Name:</label>
+            <input type="text" id="domain-name" name="domain-name" required>
+            <button type="submit">Add Domain</button>
+        </form>
+        {{if .Error}}
+            <div class="error-message">{{.Error}}</div>
+        {{end}}
+    </div>
+    {{end}}
+
+    <div class="domain-table-container">
+        <table id="domainTable">
+            <thead>
+                <tr>
+                    <th data-sort="domain">Domains <span class="sort-arrow"></span></th>
+                    <th>Message</th>                    
+                    <th data-sort="validUntil">Valid Until <span class="sort-arrow"></span></th>
+                    <th data-sort="daysLeft">Days Left <span class="sort-arrow"></span></th>
+                    {{if .isAdmin}}
+                    <th>Action</th>
+                    {{end}}
+                </tr>
+            </thead>
+            <tbody>
+                {{range .domains}}
+                {{ $statusClass := "" }}
+                {{if gt .DaysLeft 7 }}
+                    {{ $statusClass = "status-ok" }}
+                {{else if and (le .DaysLeft 7) (gt .DaysLeft 3) }}
+                    {{ $statusClass = "status-warning" }}
+                {{else if le .DaysLeft 3 }}
+                    {{ $statusClass = "status-error" }}
+                {{end}}
+                <tr class="{{ $statusClass }}">
+                    <td>{{.Name}}</td>
+                    <td>{{if .Message}}{{.Message}}{{else}}&nbsp;{{end}}</td>
+                    <td>{{.ValidUntil.Format "2006-01-02 15:04:05"}}</td>
+                    <td>{{.DaysLeft}}</td>
+                    {{if $.isAdmin}}
+                    <td class="del-btn">
+                        <form action="/home/del-domain" method="post" style="display:inline;">
+                            <input type="hidden" name="domain" value="{{.Name}}">
+                            <button type="submit" class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    </td>
+                    {{end}}
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="{{if .isAdmin}}5{{else}}4{{end}}">No domains found</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

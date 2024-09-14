@@ -1,0 +1,133 @@
+.add-user-btn {
+    width: 60%;
+    margin: 20px auto;
+    padding: 15px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    box-sizing: border-box; /* Добавлено для учета padding и border в ширине */
+}
+
+.add-user-btn h2 {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.add-user-btn form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap; /* Позволяет перенос элементов на новую строку */
+    justify-content: center; /* Центрирует элементы по горизонтали */
+    align-items: center;
+    width: 100%;
+    margin-bottom: 5px; /* Уменьшен отступ между строками */
+}
+
+.form-row label {
+    margin-right: 10px;
+    margin-left: 10px;
+    flex: 0 1 auto; /* Позволяет элементам уменьшаться и увеличиваться */
+}
+
+.form-row input,
+.form-row select {
+    padding: 8px;
+    margin-right: 10px;
+    width: calc(100% - 200px); /* Устанавливаем ширину с учетом отступов и размеров других элементов */
+    max-width: 150px; /* Максимальная ширина элемента ввода */
+}
+
+.form-row button {
+    padding: 8px 16px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    white-space: nowrap; /* Предотвращает перенос текста внутри кнопки */
+    flex: 0 1 auto; /* Позволяет кнопке уменьшаться и увеличиваться */
+}
+
+.form-row button:hover {
+    background-color: #45a049;
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+
+
+/* Стили для таблицы пользователей */
+.user-table {
+    width: 60%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+.user-table th, .user-table td {
+    padding: 8px; /* Уменьшенные отступы для уменьшения высоты строк */
+    border: 1px solid #ddd;
+    text-align: left; /* Выравнивание по левому краю */
+}
+
+.user-table th {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.user-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.user-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Стили для tbody с классом user-table-children */
+.user-table-children tr {
+    height: 40px; /* Устанавливаем фиксированную высоту строки */
+}
+
+.user-table-children td {
+    vertical-align: middle; /* Выравнивание по центру по вертикали */
+}
+
+.actions {
+    display: flex; /* Располагаем все элементы в одной строке */
+    align-items: center; /* Выровнять элементы по центру по вертикали */
+    gap: 10px; /* Отступ между элементами */
+}
+
+.action-form {
+    display: flex;
+    align-items: center;
+}
+
+.action-form select {
+    margin-right: 5px; /* Отступ между селектом и кнопкой */
+}
+
+.action-form button {
+    text-align: center;
+    padding: 5px 10px; /* Уменьшенные отступы */
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.action-form button:hover {
+    background-color: #45a049;
+}

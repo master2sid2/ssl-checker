@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/media/favicon.ico" type="image/x-icon">
+    <title>Login</title>
+    <link rel="stylesheet" href="/static/css/login.style.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="login-body">
+    <div class="login-global">
+        <div class="login-wrapper">
+            <div class="login-container">
+                <h1>Login</h1>
+                <form action="/login" method="post">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                    {{if .Error}}
+                    <p class="error-message">{{.Error}}</p>
+                    {{end}}
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

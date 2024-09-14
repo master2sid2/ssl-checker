@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/admin.style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="/static/media/favicon.ico" type="image/x-icon">
+    <script src="/static/js/admin.script.js"></script>
+    <title>Admin Page</title>
+</head>
+<body>
+    {{template "navbar.html" .}}
+    <h1>Admin Page</h1>
+    <div class="add-user-btn">
+        <h2>Add User</h2>
+        <form action="/admin/add" method="post">
+            <div class="form-row">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <label for="role">Role:</label>
+                <select id="role" name="role">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <button type="submit">Add User</button>
+            </div>
+        </form>
+        {{if .Error}}
+            <div class="error-message">{{.Error}}</div>
+        {{end}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </div>
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="user-table-children">
+            {{range .users}}
+            <tr>
+                <td>{{.Username}}</td>
+                <td>{{.Role}}</td>
+                <td class="actions">
+                    <form action="/admin/delete" method="post" class="action-form">
+                        <input type="hidden" name="username" value="{{.Username}}">
+                        <button type="submit">Delete</button>
+                    </form>
+                    <form action="/admin/role" method="post" class="action-form">
+                        <input type="hidden" name="username" value="{{.Username}}">
+                        <select name="role">
+                            <option value="user" {{if eq .Role "user"}}selected{{end}}>User</option>
+                            <option value="admin" {{if eq .Role "admin"}}selected{{end}}>Admin</option>
+                        </select>
+                        <button type="submit">Change Role</button>
+                    </form>
+                </td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+</body>
+</html>

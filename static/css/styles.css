@@ -1,0 +1,155 @@
+/* Основные стили для всего сайта */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0; /* Светлый фон для всего сайта */
+}
+
+h1, h2 {
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+/* Стили для навигационной панели */
+.navbar {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end; /* Иконка профиля выравнивается вправо */
+    align-items: center;
+}
+
+.profile-menu {
+    position: relative;
+}
+
+.profile-icon {
+    font-size: 40px; /* Размер иконки */
+    color: white; /* Цвет иконки */
+    cursor: pointer;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0; /* Прижимаем меню к правому краю профиля */
+    background-color: white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    z-index: 100;
+    min-width: 180px; /* Задаем минимальную ширину для меню */
+    box-sizing: border-box;
+}
+.currentUser {
+    color: #7c7b7b;
+    text-align: center;
+    font-weight: bold;
+}
+
+.dropdown a, .dropdown button {
+    display: block;
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+    border: none;
+    background: none;
+    text-align: left;
+}
+
+.dropdown a:hover, .dropdown button:hover {
+    background-color: #f4f4f4;
+}
+
+.profile-menu:hover .dropdown {
+    display: block;
+}
+
+/* Разделитель в меню */
+.dropdown-divider {
+    border-top: 1px solid #ddd;
+    margin: 5px 0;
+}
+
+/* Стили для кнопки "Назад" на странице admin */
+.back-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-right: 40px;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+/* Стили для форм и кнопок */
+form {
+    margin: 20px 0;
+}
+
+input[type="text"], input[type="password"], select {
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+form button[type="submit"] {
+    background-color: #007bff;
+}
+
+form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+form button[type="submit"]:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
+    border: 1px solid red;
+    border-radius: 6px;
+    padding: 12px;
+}
