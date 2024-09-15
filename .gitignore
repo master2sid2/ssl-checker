@@ -26,3 +26,6 @@ go.work.sum
 
 # User data directory
 data/
+data/cache.json
+data/domains.list
+data/users.json

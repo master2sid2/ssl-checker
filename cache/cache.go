@@ -20,7 +20,7 @@ func LoadCache() ([]domains_utils.Domain, error) {
 	file, err := os.Open(CacheFile)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return []domains_utils.Domain{}, nil // Кеш не существует, возвращаем пустой список
+			return []domains_utils.Domain{}, nil
 		}
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func SaveCache(domains []domains_utils.Domain) error {
 
 func UpdateCache() {
 	for {
-		domains, err := domains_utils.LoadDomains() // Чтение доменов из файла
+		domains, err := domains_utils.LoadDomains()
 		if err != nil {
 			log.Println("Error loading domains:", err)
 			continue

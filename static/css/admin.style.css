@@ -131,3 +131,35 @@
 .action-form button:hover {
     background-color: #45a049;
 }
+
+/* Стили для таблицы активных сессий */
+.session-tbl {
+    width: 60%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+.session-tbl th, .session-tbl td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.session-tbl th {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.session-tbl tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.session-tbl tr:hover {
+    background-color: #f1f1f1;
+}
+
+.session-tbl td {
+    vertical-align: middle; /* Выравнивание текста по центру по вертикали */
+}
