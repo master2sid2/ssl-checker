@@ -34,13 +34,15 @@ func InitRoutes(r *gin.Engine) {
 		username := c.PostForm("username")
 		password := c.PostForm("password")
 
+		browser, osInfo := utils.ParseUserAgent(c.Request.UserAgent())
+
 		if auth.CheckPassword(username, password) {
 			sessionID := auth.GenerateSessionID()
 			auth.Sessions[sessionID] = auth.Session{
 				Username:  username,
 				SessionID: sessionID,
 				IP:        c.ClientIP(),
-				Device:    c.Request.UserAgent(),
+				Device:    browser + " on " + osInfo,
 				Expiry:    time.Now().Add(30 * time.Minute)}
 			http.SetCookie(c.Writer, &http.Cookie{
 				Name:    auth.SessionCookieName,
