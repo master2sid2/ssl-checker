@@ -2,8 +2,8 @@ package auth
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"log"
+	"os"
 	"regexp"
 
 	"golang.org/x/crypto/bcrypt"
@@ -18,19 +18,17 @@ type User struct {
 var Users = make(map[string]User)
 
 func ValidateUsername(username string) bool {
-	// Разрешены только буквы, цифры, дефисы, подчеркивания и точки
 	validUsername := regexp.MustCompile(`^[a-zA-Z0-9._-]+$`)
 	return validUsername.MatchString(username)
 }
 
-// Проверка, существует ли пользователь
 func UserExists(username string) bool {
 	_, exists := Users[username]
 	return exists
 }
 
 func LoadUsers() {
-	data, err := ioutil.ReadFile("data/users.json")
+	data, err := os.ReadFile("data/users.json")
 	if err != nil {
 		log.Println("Error reading users file:", err)
 		CreateDefaultUsers()
@@ -54,7 +52,7 @@ func SaveUsers() {
 		log.Println("Error marshalling users:", err)
 		return
 	}
-	err = ioutil.WriteFile("data/users.json", data, 0644)
+	err = os.WriteFile("data/users.json", data, 0644)
 	if err != nil {
 		log.Println("Error writing users file:", err)
 	}

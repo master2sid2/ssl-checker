@@ -36,11 +36,16 @@ func InitRoutes(r *gin.Engine) {
 
 		if auth.CheckPassword(username, password) {
 			sessionID := auth.GenerateSessionID()
-			auth.Sessions[sessionID] = auth.Session{Username: username, Expiry: time.Now().Add(24 * time.Hour)}
+			auth.Sessions[sessionID] = auth.Session{
+				Username:  username,
+				SessionID: sessionID,
+				IP:        c.ClientIP(),
+				Device:    c.Request.UserAgent(),
+				Expiry:    time.Now().Add(30 * time.Minute)}
 			http.SetCookie(c.Writer, &http.Cookie{
 				Name:    auth.SessionCookieName,
 				Value:   sessionID,
-				Expires: time.Now().Add(24 * time.Hour),
+				Expires: time.Now().Add(30 * time.Minute),
 			})
 			c.Redirect(http.StatusSeeOther, "/home")
 		} else {
@@ -49,6 +54,25 @@ func InitRoutes(r *gin.Engine) {
 				"Error": "Invalid username or password",
 			})
 		}
+	})
+
+	r.POST("/logout", func(c *gin.Context) {
+		sessionID, err := c.Cookie(auth.SessionCookieName)
+		if err != nil {
+			c.Redirect(http.StatusSeeOther, "/login")
+			return
+		}
+
+		delete(auth.Sessions, sessionID)
+
+		http.SetCookie(c.Writer, &http.Cookie{
+			Name:    auth.SessionCookieName,
+			Value:   "",
+			Expires: time.Now().Add(-time.Hour),
+			Path:    "/",
+		})
+
+		c.Redirect(http.StatusSeeOther, "/login")
 	})
 
 	r.GET("/home", func(c *gin.Context) {
@@ -89,31 +113,21 @@ func InitRoutes(r *gin.Engine) {
 			return
 		}
 
+		isAdmin := auth.Users[auth.Sessions[sessionID].Username].Role == "admin"
+
 		domainName := c.PostForm("domain-name")
 		if domainName == "" {
 			c.Redirect(http.StatusSeeOther, "/home")
 			return
 		}
 
-		// Извлекаем только домен из URL
 		domainName = utils.ExtractDomain(domainName)
 		log.Println("Extracted domain:", domainName)
 
 		domains, err := domains_utils.LoadDomains()
-		//        if err != nil {
-		//            log.Println("Error loading domains:", err)
-		//            c.Redirect(http.StatusSeeOther, "/home")
-		//            return
-		//        }
 
-		//        log.Println("Loaded domains:", domains)
-
-		isAdmin := auth.Users[auth.Sessions[sessionID].Username].Role == "admin"
-
-		// Проверка дубликатов
 		for _, d := range domains {
 			if d == domainName {
-				// Если домен уже существует, отправляем сообщение на /home
 				c.HTML(http.StatusOK, "home.html", gin.H{
 					"isAdmin":          isAdmin,
 					"showActionColumn": isAdmin,
@@ -126,7 +140,6 @@ func InitRoutes(r *gin.Engine) {
 
 		}
 
-		// Добавляем домен и сохраняем его
 		domains = append(domains, domainName)
 		err = domains_utils.SaveDomains(domains)
 		if err != nil {
@@ -137,7 +150,6 @@ func InitRoutes(r *gin.Engine) {
 
 		log.Println("Domain added successfully:", domainName)
 
-		// Обновляем кеш
 		domainData, err := domains_utils.UpdateDomainTable(domains)
 		if err != nil {
 			log.Println("Error updating domain table:", err)
@@ -148,7 +160,6 @@ func InitRoutes(r *gin.Engine) {
 			}
 		}
 
-		// Перенаправляем на /home после успешного добавления
 		c.Redirect(http.StatusSeeOther, "/home")
 	})
 
@@ -172,7 +183,6 @@ func InitRoutes(r *gin.Engine) {
 			return
 		}
 
-		// Проверяем наличие домена в списке
 		index := -1
 		for i, d := range domains {
 			if d == domainName {
@@ -181,7 +191,6 @@ func InitRoutes(r *gin.Engine) {
 			}
 		}
 
-		// Если домен найден, удаляем его
 		if index != -1 {
 			domains = append(domains[:index], domains[index+1:]...)
 			err = domains_utils.SaveDomains(domains)
@@ -189,7 +198,6 @@ func InitRoutes(r *gin.Engine) {
 				log.Println("Error saving domains:", err)
 			}
 
-			// Обновляем кеш
 			domainData, err := domains_utils.UpdateDomainTable(domains)
 			if err != nil {
 				log.Println("Error updating domain table:", err)
@@ -212,8 +220,16 @@ func InitRoutes(r *gin.Engine) {
 			return
 		}
 
-		currentUser := auth.Sessions[sessionID].Username
+		activeSessions := []auth.Session{}
+		for id, session := range auth.Sessions {
+			if time.Now().Before(session.Expiry) {
+				activeSessions = append(activeSessions, session)
+			} else {
+				delete(auth.Sessions, id)
+			}
+		}
 
+		currentUser := auth.Sessions[sessionID].Username
 		userList := []auth.User{}
 		for _, user := range auth.Users {
 			userList = append(userList, user)
@@ -221,9 +237,88 @@ func InitRoutes(r *gin.Engine) {
 
 		c.HTML(http.StatusOK, "admin.html", gin.H{
 			"isAdmin":     true,
+			"Sessions":    activeSessions,
 			"currentUser": currentUser,
 			"users":       userList,
 		})
+	})
+
+	r.POST("/admin/end-session", func(c *gin.Context) {
+		sessionID := c.PostForm("session_id")
+		if sessionID == "" {
+			c.Redirect(http.StatusSeeOther, "/admin")
+			return
+		}
+
+		auth.EndSession(sessionID)
+
+		c.Redirect(http.StatusSeeOther, "/admin")
+	})
+
+	r.POST("/admin/add-user", func(c *gin.Context) {
+		var errorMessage string
+
+		if !auth.CheckAdminSession(c) {
+			c.Redirect(http.StatusSeeOther, "/login")
+			return
+		}
+
+		username := c.PostForm("username")
+		password := c.PostForm("password")
+		role := c.PostForm("role")
+
+		if !auth.ValidateUsername(username) {
+			errorMessage = "Invalid username. Only letters, numbers, dashes, underscores, and dots are allowed."
+		}
+
+		if auth.UserExists(username) {
+			errorMessage = "User already exists."
+		}
+
+		if errorMessage != "" {
+			c.HTML(http.StatusOK, "admin.html", gin.H{
+				"Error": errorMessage,
+			})
+			return
+		}
+
+		auth.Users[username] = auth.User{
+			Username: username,
+			Password: string(auth.HashPassword(password)),
+			Role:     role,
+		}
+		auth.SaveUsers()
+		c.Redirect(http.StatusSeeOther, "/admin")
+	})
+
+	r.POST("/admin/delete-user", func(c *gin.Context) {
+		if !auth.CheckAdminSession(c) {
+			c.Redirect(http.StatusSeeOther, "/login")
+			return
+		}
+
+		username := c.PostForm("username")
+		delete(auth.Users, username)
+		auth.SaveUsers()
+		c.Redirect(http.StatusSeeOther, "/admin")
+	})
+
+	r.POST("/admin/set-role", func(c *gin.Context) {
+		if !auth.CheckAdminSession(c) {
+			c.Redirect(http.StatusSeeOther, "/login")
+			return
+		}
+
+		username := c.PostForm("username")
+		role := c.PostForm("role")
+
+		user, exists := auth.Users[username]
+		if exists {
+			user.Role = role
+			auth.Users[username] = user
+			auth.SaveUsers()
+		}
+		c.Redirect(http.StatusSeeOther, "/admin")
 	})
 
 	r.GET("/change-password", func(c *gin.Context) {
@@ -268,83 +363,5 @@ func InitRoutes(r *gin.Engine) {
 		c.Redirect(http.StatusSeeOther, "/home")
 	})
 
-	r.POST("/logout", func(c *gin.Context) {
-		http.SetCookie(c.Writer, &http.Cookie{
-			Name:    auth.SessionCookieName,
-			Value:   "",
-			Expires: time.Now().Add(-time.Hour),
-		})
-		c.Redirect(http.StatusSeeOther, "/login")
-	})
-
-	r.POST("/admin/add", func(c *gin.Context) {
-		if !auth.CheckAdminSession(c) {
-			c.Redirect(http.StatusSeeOther, "/login")
-			return
-		}
-
-		username := c.PostForm("username")
-		password := c.PostForm("password")
-		role := c.PostForm("role")
-
-		var errorMessage string
-
-		if !auth.ValidateUsername(username) {
-			errorMessage = "Invalid username. Only letters, numbers, dashes, underscores, and dots are allowed."
-		}
-
-		// Проверка, существует ли пользователь
-		if auth.UserExists(username) {
-			errorMessage = "User already exists."
-		}
-
-		if errorMessage != "" {
-			// Передача ошибки обратно на страницу /admin
-			c.HTML(http.StatusOK, "admin.html", gin.H{
-				"Error": errorMessage,
-			})
-			return
-		}
-
-		auth.Users[username] = auth.User{
-			Username: username,
-			Password: string(auth.HashPassword(password)),
-			Role:     role,
-		}
-		auth.SaveUsers()
-		c.Redirect(http.StatusSeeOther, "/admin")
-	})
-
-	r.POST("/admin/delete", func(c *gin.Context) {
-		if !auth.CheckAdminSession(c) {
-			c.Redirect(http.StatusSeeOther, "/login")
-			return
-		}
-
-		username := c.PostForm("username")
-		delete(auth.Users, username)
-		auth.SaveUsers()
-		c.Redirect(http.StatusSeeOther, "/admin")
-	})
-
-	r.POST("/admin/role", func(c *gin.Context) {
-		if !auth.CheckAdminSession(c) {
-			c.Redirect(http.StatusSeeOther, "/login")
-			return
-		}
-
-		username := c.PostForm("username")
-		role := c.PostForm("role")
-
-		user, exists := auth.Users[username]
-		if exists {
-			user.Role = role
-			auth.Users[username] = user
-			auth.SaveUsers()
-		}
-		c.Redirect(http.StatusSeeOther, "/admin")
-	})
-
 	r.LoadHTMLGlob("templates/*")
-
 }

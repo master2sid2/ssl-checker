@@ -8,8 +8,11 @@ import (
 )
 
 type Session struct {
-	Username string
-	Expiry   time.Time
+	Username  string
+	SessionID string
+	IP        string
+	Device    string
+	Expiry    time.Time
 }
 
 var Sessions = make(map[string]Session)
@@ -34,4 +37,20 @@ func CheckAdminSession(c *gin.Context) bool {
 		return false
 	}
 	return true
+}
+
+func EndSession(sessionID string) {
+	delete(Sessions, sessionID)
+}
+
+func GetActiveSessions() map[string]Session {
+	activeSessions := make(map[string]Session)
+	for sessionID, session := range Sessions {
+		if time.Now().Before(session.Expiry) {
+			activeSessions[sessionID] = session
+		} else {
+			delete(Sessions, sessionID)
+		}
+	}
+	return activeSessions
 }

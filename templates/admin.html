@@ -13,7 +13,7 @@
     <h1>Admin Page</h1>
     <div class="add-user-btn">
         <h2>Add User</h2>
-        <form action="/admin/add" method="post">
+        <form action="/admin/add-user" method="post">
             <div class="form-row">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required>
@@ -32,6 +32,41 @@
         {{end}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </div>
+    <div class="session-tbl">
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Session ID</th>
+                    <th>IP</th>
+                    <th>Device</th>
+                    <th>Expires At</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range .Sessions }}
+                <tr>
+                    <td>{{ .Username }}</td>
+                    <td>{{ .SessionID }}</td>
+                    <td>{{ .IP }}</td>
+                    <td>{{ .Device }}</td>
+                    <td>{{ .Expiry.Format "2006-01-02 15:04:05" }}</td>
+                    <td>
+                        <form method="POST" action="/admin/end-session">
+                            <input type="hidden" name="session_id" value="{{ .SessionID }}">
+                            <button type="submit">End Session</button>
+                        </form>
+                    </td>
+                </tr>
+                {{ else }}
+                <tr>
+                    <td colspan="5">No active sessions</td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
     <table class="user-table">
         <thead>
             <tr>
@@ -46,11 +81,11 @@
                 <td>{{.Username}}</td>
                 <td>{{.Role}}</td>
                 <td class="actions">
-                    <form action="/admin/delete" method="post" class="action-form">
+                    <form action="/admin/delete-user" method="post" class="action-form">
                         <input type="hidden" name="username" value="{{.Username}}">
                         <button type="submit">Delete</button>
                     </form>
-                    <form action="/admin/role" method="post" class="action-form">
+                    <form action="/admin/set-role" method="post" class="action-form">
                         <input type="hidden" name="username" value="{{.Username}}">
                         <select name="role">
                             <option value="user" {{if eq .Role "user"}}selected{{end}}>User</option>

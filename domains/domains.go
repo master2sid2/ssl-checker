@@ -3,8 +3,8 @@ package domains_utils
 import (
 	"crypto/tls"
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 	"strings"
 	"time"
 )
@@ -16,10 +16,10 @@ type Domain struct {
 	Message    string
 }
 
-var Domains = []string{} // Slice для хранения доменов
+var Domains = []string{}
 
 func LoadDomains() ([]string, error) {
-	data, err := ioutil.ReadFile("data/domains.list")
+	data, err := os.ReadFile("data/domains.list")
 	if err != nil {
 		log.Println("Error reading domains file:", err)
 		return nil, err
@@ -31,7 +31,7 @@ func LoadDomains() ([]string, error) {
 
 func SaveDomains(domains []string) error {
 	data := strings.Join(domains, "\n")
-	err := ioutil.WriteFile("data/domains.list", []byte(data), 0644)
+	err := os.WriteFile("data/domains.list", []byte(data), 0644)
 	if err != nil {
 		log.Println("Error writing domains file:", err)
 		return err
@@ -60,9 +60,7 @@ func CheckCertificate(domain string) (time.Time, string) {
 
 	cert := conn.ConnectionState().PeerCertificates[0]
 	validUntil := cert.NotAfter
-	//daysLeft := int(validUntil.Sub(time.Now()).Hours() / 24)
-
-	return validUntil, "" // Пустое сообщение, если проблем нет
+	return validUntil, ""
 }
 
 func UpdateDomainTable(domains []string) ([]Domain, error) {
@@ -72,7 +70,6 @@ func UpdateDomainTable(domains []string) ([]Domain, error) {
 		validUntil, message := CheckCertificate(domainName)
 		daysLeft := int(validUntil.Sub(time.Now()).Hours() / 24)
 
-		// Убираем сообщение, если его нет
 		domainMessage := ""
 		if message != "" {
 			domainMessage = message
