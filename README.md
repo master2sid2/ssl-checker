@@ -1,4 +1,4 @@
-![golang logo](golang_logo.png)
+![golang logo](https://go.dev/blog/go-brand/Go-Logo/PNG/Go-Logo_LightBlue.png)
 
 # Golang SSL certificate validation application
 
