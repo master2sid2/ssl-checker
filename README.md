@@ -37,3 +37,12 @@ go build
 # Bugs
 When adding a domain or user, the request is redirected to the page specified in the Action form instead of staying on the same page.
 When adding a large number of domains, the next operations of adding or deleting can take a long time (15 minutes for 100+ domains).
+
+# What I want to do
+* Add languages
+* Add configs as command line arguments
+* Add configs as config files
+* Add prometheus metrics
+* Prepare docker file
+* Prepare Helm chart
+* Maybe something else :)
