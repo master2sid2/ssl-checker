@@ -1,10 +1,21 @@
 package utils
 
 import (
+	"log"
 	"net/url"
 	"regexp"
 	"strings"
+
+	"ssl-checker/cache"
 )
+
+type CertStats struct {
+	TotalCertificates        int
+	ValidCertificates        int
+	ExpiringSoonCertificates int
+	CriticalCertificates     int
+	ErrorCertificates        int
+}
 
 func ExtractDomain(domainURL string) string {
 	domainURL = strings.TrimSpace(domainURL)
@@ -20,17 +31,15 @@ func ExtractDomain(domainURL string) string {
 }
 
 func ParseUserAgent(userAgent string) (string, string) {
-	// Регулярное выражение для извлечения информации о браузере
 	browserRe := regexp.MustCompile(`(Chrome|Firefox|Safari|Edge|Opera)/[\d.]+`)
 	browserMatches := browserRe.FindString(userAgent)
 
-	// Регулярное выражение для извлечения информации об операционной системе
 	osRe := regexp.MustCompile(`\(([^)]+)\)`)
 	osMatches := osRe.FindStringSubmatch(userAgent)
 
 	var osInfo string
 	if len(osMatches) > 1 {
-		osInfo = osMatches[1] // Возьмем строку, которая внутри скобок
+		osInfo = osMatches[1]
 	} else {
 		osInfo = "Unknown OS"
 	}
@@ -40,4 +49,30 @@ func ParseUserAgent(userAgent string) (string, string) {
 	}
 
 	return browserMatches, osInfo
+}
+
+func CalculateCertificateStats() (CertStats, error) {
+	var stats CertStats
+
+	domains, err := cache.LoadCache()
+	if err != nil {
+		log.Printf("Error loading cache: %v", err)
+		return stats, err
+	}
+
+	stats.TotalCertificates = len(domains)
+
+	for _, domain := range domains {
+		if domain.Message != "" {
+			stats.ErrorCertificates++
+		} else if domain.DaysLeft > 7 {
+			stats.ValidCertificates++
+		} else if domain.DaysLeft <= 7 && domain.DaysLeft > 3 {
+			stats.ExpiringSoonCertificates++
+		} else if domain.DaysLeft <= 3 {
+			stats.CriticalCertificates++
+		}
+	}
+
+	return stats, nil
 }

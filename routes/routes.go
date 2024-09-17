@@ -87,6 +87,11 @@ func InitRoutes(r *gin.Engine) {
 
 		isAdmin := auth.Users[auth.Sessions[sessionID].Username].Role == "admin"
 		currentUser := auth.Sessions[sessionID].Username
+		stats, err := utils.CalculateCertificateStats()
+		if err != nil {
+			log.Println("message: Error calculating certificate stats.")
+			return
+		}
 
 		domains, err := cache.LoadCache()
 		if err != nil {
@@ -101,10 +106,15 @@ func InitRoutes(r *gin.Engine) {
 		}
 
 		c.HTML(http.StatusOK, "home.html", gin.H{
-			"currentUser":      currentUser,
-			"isAdmin":          isAdmin,
-			"showActionColumn": isAdmin,
-			"domains":          domains,
+			"currentUser":              currentUser,
+			"isAdmin":                  isAdmin,
+			"showActionColumn":         isAdmin,
+			"domains":                  domains,
+			"TotalCertificates":        stats.TotalCertificates,
+			"ValidCertificates":        stats.ValidCertificates,
+			"ExpiringSoonCertificates": stats.ExpiringSoonCertificates,
+			"CriticalCertificates":     stats.CriticalCertificates,
+			"ErrorCertificates":        stats.ErrorCertificates,
 		})
 	})
 

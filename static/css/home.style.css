@@ -183,3 +183,33 @@ th[data-sort]:hover {
 .status-error {
     background-color: #f8d7da !important; /* Красный цвет для срока действия 3 дня и меньше */
 }
+
+.white {
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.green {
+    background-color: #d4edda;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.yellow {
+    background-color: #fff3cd;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.red {
+    background-color: #f8d7da;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.gray {
+    background-color: #607D8B;
+    color: #fff;
+    border: 1px solid #ccc;
+}
