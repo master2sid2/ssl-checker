@@ -72,6 +72,7 @@
             <tr>
                 <th>Username</th>
                 <th>Role</th>
+                <th>Status</th> <!-- Добавляем столбец для статуса -->
                 <th>Actions</th>
             </tr>
         </thead>
@@ -80,11 +81,15 @@
             <tr>
                 <td>{{.Username}}</td>
                 <td>{{.Role}}</td>
+                <td>{{.Status}}</td> <!-- Отображаем статус пользователя -->
                 <td class="actions">
+                    <!-- Кнопка удаления пользователя -->
                     <form action="/admin/delete-user" method="post" class="action-form">
                         <input type="hidden" name="username" value="{{.Username}}">
                         <button type="submit">Delete</button>
                     </form>
+                    
+                    <!-- Форма для изменения роли -->
                     <form action="/admin/set-role" method="post" class="action-form">
                         <input type="hidden" name="username" value="{{.Username}}">
                         <select name="role">
@@ -93,10 +98,20 @@
                         </select>
                         <button type="submit">Change Role</button>
                     </form>
+                    
+                    <!-- Кнопка "Approve" для пользователей со статусом "pending" -->
+                    {{if eq .Status "pending"}}
+                    <form action="/admin/approve-user" method="post" class="action-form">
+                        <input type="hidden" name="username" value="{{.Username}}">
+                        <button type="submit">Approve</button>
+                    </form>
+                    {{end}}
                 </td>
             </tr>
             {{end}}
         </tbody>
     </table>
+    
+
 </body>
 </html>

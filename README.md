@@ -5,11 +5,11 @@
 # Table of Contents
 
 - [Overview](#overview)
+- [Screenshots](#screenshots)
 - [Run](#run)
 - [Build](#build)
 - [Bugs](#bugs)
 - [What I want to do](#what-i-want-to-do)
-
 
 # Overview
 Golang version 1.23
@@ -20,6 +20,17 @@ Implemented authorization with the ability to log in users with User and Admin r
 User role can only view the list of domains.
 Admin role has the ability to add and remove domains as well as manage users
 Implemented a background task that updates the cache every hourImplemented a background task that updates the cache every hour
+
+# Screenshots
+User based interface
+![image](https://github.com/user-attachments/assets/42674360-cbd3-4e7a-93b7-331407b44ed9)
+
+Admin based interface
+![image](https://github.com/user-attachments/assets/080411a4-f86b-4baf-b4ae-5452eafef26e)
+
+Admin manage users interface
+![image](https://github.com/user-attachments/assets/1a319549-ec1f-4866-bd8a-65af3ef39cf0)
+
 
 # Run
 For running application just clone repositiry and execute `go run main.go` command

@@ -26,6 +26,49 @@ func InitRoutes(r *gin.Engine) {
 		c.Redirect(http.StatusSeeOther, "/home")
 	})
 
+	r.GET("/register", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "register.html", nil) // Отображение страницы регистрации
+	})
+
+	r.POST("/register", func(c *gin.Context) {
+		username := c.PostForm("username")
+		password := c.PostForm("password")
+
+		if !auth.ValidateUsername(username) {
+			c.HTML(http.StatusBadRequest, "login.html", gin.H{
+				"Error": "The username must contain only letters, numbers, periods, dashes or underscores.",
+			})
+			return
+		}
+
+		if len(username) < 3 || len(password) < 6 {
+			c.HTML(http.StatusBadRequest, "login.html", gin.H{
+				"Error": "The username must be at least 3 characters and the password must be at least 6 characters.",
+			})
+			return
+		}
+
+		if auth.UserExists(username) {
+			c.HTML(http.StatusBadRequest, "login.html", gin.H{
+				"Error": "A user with this name already exists.",
+			})
+			return
+		}
+
+		auth.Users[username] = auth.User{
+			Username: username,
+			Password: string(auth.HashPassword(password)),
+			Role:     "user",
+			Status:   "pending",
+		}
+
+		auth.SaveUsers()
+
+		c.HTML(http.StatusOK, "login.html", gin.H{
+			"Success": "Регистрация успешна. Ожидайте подтверждения администратора.",
+		})
+	})
+
 	r.GET("/login", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "login.html", gin.H{})
 	})
@@ -86,6 +129,14 @@ func InitRoutes(r *gin.Engine) {
 		}
 
 		isAdmin := auth.Users[auth.Sessions[sessionID].Username].Role == "admin"
+		userSession := auth.Sessions[sessionID]
+		if auth.Users[userSession.Username].Status != "registered" {
+			c.HTML(http.StatusForbidden, "login.html", gin.H{
+				"Error": "Your account is awaiting confirmation by the administrator.",
+			})
+			return
+		}
+
 		currentUser := auth.Sessions[sessionID].Username
 		stats, err := utils.CalculateCertificateStats()
 		if err != nil {
@@ -253,6 +304,32 @@ func InitRoutes(r *gin.Engine) {
 			"currentUser": currentUser,
 			"users":       userList,
 		})
+	})
+
+	r.POST("/admin/approve-user", func(c *gin.Context) {
+		username := c.PostForm("username")
+
+		user, exists := auth.Users[username]
+		if !exists {
+			c.HTML(http.StatusBadRequest, "admin.html", gin.H{
+				"Error": "User not found.",
+			})
+			return
+		}
+
+		if user.Status != "pending" {
+			c.HTML(http.StatusBadRequest, "admin.html", gin.H{
+				"Error": "The user has already been confirmed or has an incorrect status.",
+			})
+			return
+		}
+
+		user.Status = "registered"
+		auth.Users[username] = user
+
+		auth.SaveUsers()
+
+		c.Redirect(http.StatusSeeOther, "/admin")
 	})
 
 	r.POST("/admin/end-session", func(c *gin.Context) {
