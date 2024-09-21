@@ -21,6 +21,9 @@
                     {{if .Error}}
                     <p class="error-message">{{.Error}}</p>
                     {{end}}
+                    {{if .Success}}
+                    <p class="success-message">{{.Success}}</p>
+                    {{end}}
                     <button type="submit">Login</button>
                 </form>
                 <p>Don't have an account? <a href="/register">Register here</a></p>

@@ -7,7 +7,7 @@ import (
 
 	"ssl-checker/auth"
 	"ssl-checker/cache"
-	"ssl-checker/domains"
+	domains_utils "ssl-checker/domains"
 	"ssl-checker/utils"
 
 	"github.com/gin-gonic/gin"
@@ -65,7 +65,7 @@ func InitRoutes(r *gin.Engine) {
 		auth.SaveUsers()
 
 		c.HTML(http.StatusOK, "login.html", gin.H{
-			"Success": "Регистрация успешна. Ожидайте подтверждения администратора.",
+			"Success": "Registration is successful. Wait for administrator's confirmation..",
 		})
 	})
 
