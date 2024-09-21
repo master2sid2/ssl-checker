@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"sort"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -85,4 +86,18 @@ func CheckPassword(username, password string) bool {
 		log.Println("Password mismatch for user:", username)
 	}
 	return err == nil
+}
+
+func GetSortedUsers() []User {
+	userList := make([]User, 0, len(Users))
+	for _, user := range Users {
+		userList = append(userList, user)
+	}
+
+	// Сортируем пользователей по имени
+	sort.Slice(userList, func(i, j int) bool {
+		return userList[i].Username < userList[j].Username
+	})
+
+	return userList
 }

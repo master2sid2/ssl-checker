@@ -293,10 +293,7 @@ func InitRoutes(r *gin.Engine) {
 		}
 
 		currentUser := auth.Sessions[sessionID].Username
-		userList := []auth.User{}
-		for _, user := range auth.Users {
-			userList = append(userList, user)
-		}
+		userList := auth.GetSortedUsers()
 
 		c.HTML(http.StatusOK, "admin.html", gin.H{
 			"isAdmin":     true,
