@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Скрытие сообщения через 10 секунд
     setTimeout(function() {
         var errorMessage = document.querySelector('.error-message');
         if (errorMessage) {
             errorMessage.style.display = 'none';
         }
-    }, 5000); // 10000 миллисекунд = 10 секунд
+    }, 5000);
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -39,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        rows.forEach(row => tbody.appendChild(row)); // Переставляем строки в таблице
+        rows.forEach(row => tbody.appendChild(row));
     }
 
     function updateSortDirection(header) {
@@ -48,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (header === currentSortColumn) {
-            sortDirection *= -1; // Меняем направление сортировки
+            sortDirection *= -1;
         } else {
             sortDirection = 1;
         }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/static/media/favicon.ico" type="image/x-icon">
-    <title>Login</title>
+    <title>Register</title>
     <link rel="stylesheet" href="/static/css/login.style.css">
     <link rel="stylesheet" href="/static/css/styles.css">
 </head>
@@ -12,18 +12,23 @@
     <div class="login-global">
         <div class="login-wrapper">
             <div class="login-container">
-                <h1>Login</h1>
-                <form action="/login" method="post">
+                <h1>Register</h1>
+                <form action="/register" method="post">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required>
+                    
                     <label for="password">Password:</label>
                     <input type="password" id="password" name="password" required>
+                    
+                    <label for="confirm-password">Confirm Password:</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required>
+                    
                     {{if .Error}}
                     <p class="error-message">{{.Error}}</p>
                     {{end}}
-                    <button type="submit">Login</button>
+                    <button type="submit">Register</button>
                 </form>
-                <p>Don't have an account? <a href="/register">Register here</a></p>
+                <p>Already have an account? <a href="/login">Login here</a></p>
             </div>
         </div>
     </div>

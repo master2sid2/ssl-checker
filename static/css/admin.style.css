@@ -1,3 +1,4 @@
+/* Add users style */
 .add-user-btn {
     width: 60%;
     margin: 20px auto;
@@ -7,43 +8,37 @@
     background-color: #f9f9f9;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-    box-sizing: border-box; /* Добавлено для учета padding и border в ширине */
+    box-sizing: border-box;
 }
-
 .add-user-btn h2 {
     margin-bottom: 15px;
     text-align: center;
 }
-
 .add-user-btn form {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
 .form-row {
     display: flex;
-    flex-wrap: wrap; /* Позволяет перенос элементов на новую строку */
-    justify-content: center; /* Центрирует элементы по горизонтали */
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
     width: 100%;
-    margin-bottom: 5px; /* Уменьшен отступ между строками */
+    margin-bottom: 5px;
 }
-
 .form-row label {
     margin-right: 10px;
     margin-left: 10px;
-    flex: 0 1 auto; /* Позволяет элементам уменьшаться и увеличиваться */
+    flex: 0 1 auto;
 }
-
 .form-row input,
 .form-row select {
     padding: 8px;
     margin-right: 10px;
-    width: calc(100% - 200px); /* Устанавливаем ширину с учетом отступов и размеров других элементов */
-    max-width: 150px; /* Максимальная ширина элемента ввода */
+    width: calc(100% - 200px);
+    max-width: 150px;
 }
-
 .form-row button {
     padding: 8px 16px;
     border: none;
@@ -51,21 +46,18 @@
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    white-space: nowrap; /* Предотвращает перенос текста внутри кнопки */
-    flex: 0 1 auto; /* Позволяет кнопке уменьшаться и увеличиваться */
+    white-space: nowrap;
+    flex: 0 1 auto;
 }
-
 .form-row button:hover {
     background-color: #45a049;
 }
-
 .error-message {
     color: red;
     margin-top: 10px;
 }
 
-
-/* Стили для таблицы пользователей */
+/* Users style */
 .user-table {
     width: 60%;
     margin: 20px auto;
@@ -73,53 +65,42 @@
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
 }
-
 .user-table th, .user-table td {
-    padding: 8px; /* Уменьшенные отступы для уменьшения высоты строк */
+    padding: 8px;
     border: 1px solid #ddd;
-    text-align: left; /* Выравнивание по левому краю */
+    text-align: left;
 }
-
 .user-table th {
     background-color: #f4f4f4;
     color: #333;
 }
-
 .user-table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
-
 .user-table tr:hover {
     background-color: #f1f1f1;
 }
-
-/* Стили для tbody с классом user-table-children */
 .user-table-children tr {
-    height: 40px; /* Устанавливаем фиксированную высоту строки */
+    height: 40px;
 }
-
 .user-table-children td {
-    vertical-align: middle; /* Выравнивание по центру по вертикали */
+    vertical-align: middle;
 }
-
 .actions {
-    display: flex; /* Располагаем все элементы в одной строке */
-    align-items: center; /* Выровнять элементы по центру по вертикали */
-    gap: 10px; /* Отступ между элементами */
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
-
 .action-form {
     display: flex;
     align-items: center;
 }
-
 .action-form select {
-    margin-right: 5px; /* Отступ между селектом и кнопкой */
+    margin-right: 5px;
 }
-
 .action-form button {
     text-align: center;
-    padding: 5px 10px; /* Уменьшенные отступы */
+    padding: 5px 10px;
     border: none;
     background-color: #4CAF50;
     color: white;
@@ -127,12 +108,11 @@
     cursor: pointer;
     white-space: nowrap;
 }
-
 .action-form button:hover {
     background-color: #45a049;
 }
 
-/* Стили для таблицы активных сессий */
+/* User sessions style */
 .session-tbl {
     width: 60%;
     margin: 20px auto;
@@ -140,26 +120,21 @@
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
 }
-
 .session-tbl th, .session-tbl td {
     padding: 8px;
     border: 1px solid #ddd;
     text-align: left;
 }
-
 .session-tbl th {
     background-color: #f4f4f4;
     color: #333;
 }
-
 .session-tbl tr:nth-child(even) {
     background-color: #f9f9f9;
 }
-
 .session-tbl tr:hover {
     background-color: #f1f1f1;
 }
-
 .session-tbl td {
-    vertical-align: middle; /* Выравнивание текста по центру по вертикали */
+    vertical-align: middle;
 }

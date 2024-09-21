@@ -1,59 +1,52 @@
 .add-domain-btn {
     border: 2px solid #ddd;
     padding: 15px;
-    max-width: 600px; /* Увеличиваем максимальную ширину блока */
+    max-width: 600px;
     margin: 20px auto;
     background-color: #f9f9f9;
     border-radius: 8px;
 }
-
 .add-domain-btn h2 {
-    text-align: center; /* Выравниваем заголовок по центру */
-    margin-bottom: 15px; /* Добавляем немного отступа снизу */
+    text-align: center;
+    margin-bottom: 15px;
 }
-
 .add-domain-btn form {
     display: flex;
-    align-items: center; /* Выравниваем элементы по вертикали */
+    align-items: center;
     justify-content: space-between;
-    gap: 10px; /* Добавляем промежутки между элементами */
+    gap: 10px; 
 }
-
 .add-domain-btn label {
-    margin-right: 10px; /* Расстояние между текстом и input */
-    white-space: nowrap; /* Запрещаем перенос текста */
+    margin-right: 10px;
+    white-space: nowrap;
 }
-
 .add-domain-btn input[type="text"] {
-    flex-grow: 2; /* Поле ввода будет растягиваться */
+    flex-grow: 2;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
 }
-
 .add-domain-btn button {
-    padding: 8px 12px; /* Корректируем размер кнопки по содержимому */
+    padding: 8px 12px;
     background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    white-space: nowrap; /* Запрещаем перенос текста на кнопке */
+    white-space: nowrap;
 }
-
 .add-domain-btn button:hover {
     background-color: #0056b3;
 }
-
 .error-message {
     color: red;
     font-size: 14px;
     margin-top: 10px;
-    text-align: center; /* Центрируем сообщение об ошибке */
+    text-align: center;
 }
 
-/* Стили для контейнера таблицы */
+/* Table style */
 .domain-table-container {
     width: 70%;
     margin: 20px auto;
@@ -62,72 +55,57 @@
     border-radius: 8px;
     background-color: #f9f9f9;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    overflow-x: auto; /* Позволяет горизонтальную прокрутку при необходимости */
+    overflow-x: auto;
 }
-
-/* Стили для таблицы внутри контейнера */
 .domain-table-container table {
     width: 100%;
     border-collapse: collapse;
 }
-
 .domain-table-container th,
 .domain-table-container td {
     padding: 10px;
     border: 1px solid #ddd;
     text-align: left;
 }
-
-/* Фиксированная ширина колонок */
 .domain-table-container th:nth-child(1),
 .domain-table-container td:nth-child(1) {
-    width: 200px; /* Ширина для колонки Domains, измените при необходимости */
+    width: 200px; 
 }
-
 .domain-table-container th:nth-child(2),
 .domain-table-container td:nth-child(2) {
-    width: 200px; /* Ширина для колонки Message, измените при необходимости */
+    width: 200px;
 }
-
 .domain-table-container th:nth-child(3),
 .domain-table-container td:nth-child(3) {
-    width: 60px; /* Ширина для колонки Valid Until, измените при необходимости */
-    white-space: nowrap; /* Предотвращает перенос текста */
-    overflow: hidden; /* Прячет текст, который не помещается */
-    text-overflow: ellipsis; /* Добавляет троеточие, если текст не помещается */
+    width: 60px;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-
 .domain-table-container th:nth-child(4),
 .domain-table-container td:nth-child(4) {
-    width: 20px; /* Ширина для колонки Days Left, измените при необходимости */
+    width: 20px;
 }
-
 .domain-table-container th:nth-child(5),
 .domain-table-container td:nth-child(5) {
-    width: 20px; /* Ширина для колонки Action, измените при необходимости */
+    width: 20px;
 }
 
-/* Стили для заголовков таблицы */
+/* Table header style */
 .domain-table-container th {
     background-color: #f4f4f4;
 }
-
-/* Стили для четных строк */
 .domain-table-container tr:nth-child(even) {
     background-color: #f9f9f9;
 }
-
-/* Стили для строки при наведении */
 .domain-table-container tr:hover {
     background-color: #f1f1f1;
 }
-/* Стиль для маленькой кнопки с иконкой корзинки */
 .del-btn {
     align-content: center;
 }
-
 .delete-btn {
-    background-color: #dc3545; /* Красный цвет */
+    background-color: #dc3545;
     border: none;
     color: white;
     padding: 4px 8px;
@@ -135,51 +113,90 @@
     cursor: pointer;
     border-radius: 4px;
 }
-
 .delete-btn:hover {
-    background-color: #c82333; /* Более тёмный красный при наведении */
+    background-color: #c82333;
 }
-
 .delete-btn i {
-    font-size: 12px; /* Размер иконки */
+    font-size: 12px;
 }
-
 table {
     width: 100%;
     border-collapse: collapse;
 }
-
 td, th {
     border: 1px solid #ddd;
     padding: 8px;
 }
-
 tr:nth-child(even) {
-    background-color: transparent; /* Убираем цвет для четных строк */
+    background-color: transparent;
 }
-
 th[data-sort] {
     cursor: pointer;
 }
-
-/* Для наглядности: меняем цвет при наведении */
 th[data-sort]:hover {
     background-color: #acd8fc;
 }
 
-/* Стили для стрелок сортировки */
+/* Sort arrow style */
 .sort-arrow {
     margin-left: 5px;
 }
-
 .status-ok {
-    background-color: #d4edda !important; /* Зеленый цвет для нормального срока действия */
+    background-color: #d4edda !important;
 }
-
 .status-warning {
-    background-color: #fff3cd !important; /* Желтый цвет для срока действия от 7 до 3 дней */
+    background-color: #fff3cd !important;
+}
+.status-error {
+    background-color: #f8d7da !important;
 }
 
-.status-error {
-    background-color: #f8d7da !important; /* Красный цвет для срока действия 3 дня и меньше */
+/* Dashboard style */
+.cert-summary {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 1200px;
+}
+.summary-block {
+    flex: 1;
+    margin: 10px;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+.summary-block h3 {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+.summary-block p {
+    font-size: 2em;
+}
+.white {
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+}
+.green {
+    background-color: #d4edda;
+    color: #333;
+    border: 1px solid #ccc;
+}
+.yellow {
+    background-color: #fff3cd;
+    color: #333;
+    border: 1px solid #ccc;
+}
+.red {
+    background-color: #f8d7da;
+    color: #333;
+    border: 1px solid #ccc;
+}
+.gray {
+    background-color: #607D8B;
+    color: #fff;
+    border: 1px solid #ccc;
 }

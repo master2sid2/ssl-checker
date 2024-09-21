@@ -39,6 +39,29 @@
     </div>
     {{end}}
 
+    <div class="cert-summary">
+        <div class="summary-block white">
+            <h3>Total Certificates</h3>
+            <p>{{ .TotalCertificates }}</p>
+        </div>
+        <div class="summary-block green">
+            <h3>Valid</h3>
+            <p>{{ .ValidCertificates }}</p>
+        </div>
+        <div class="summary-block yellow">
+            <h3>Warning</h3>
+            <p>{{ .ExpiringSoonCertificates }}</p>
+        </div>
+        <div class="summary-block red">
+            <h3>Critical</h3>
+            <p>{{ .CriticalCertificates }}</p>
+        </div>
+        <div class="summary-block gray">
+            <h3>Errors domains</h3>
+            <p>{{ .ErrorCertificates }}</p>
+        </div>
+    </div>
+
     <div class="domain-table-container">
         <table id="domainTable">
             <thead>
