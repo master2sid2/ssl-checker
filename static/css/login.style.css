@@ -68,3 +68,12 @@
 .login-container button:hover {
     background-color: #0056b3;
 }
+
+.success-message {
+    color: rgba(28, 221, 54, 0.788);
+    background-color: #d7f8dd;
+    border-color: #c6f5cc;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
